@@ -1,18 +1,20 @@
 
-name: output-summary
-on:
-  push:
-    branches: [ "main" ]
+name: Build and Deploy
+
+on: [push]
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-      - name: Set color
-        id: color-selector
-        run: echo "SELECTED_COLOR=green" >> "$GITHUB_OUTPUT"
-      - name: Get color
-        env:
-         SELECTED_COLOR: ${{ steps.color-selector.outputs.SELECTED_COLOR }}
-        run: echo "### The selected color is $SELECTED_COLOR" >> $GITHUB_STEP_SUMMARY
+      - name: Build project
+        run: echo "Building project..." > build.txt
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-output
+          path: build.txt  # Uploads the "build.txt" file
